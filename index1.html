@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payslip Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .payslip {
+            width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #000;
+        }
+        .address{
+            display: flex;
+            justify-content: right;
+        }
+        .payslip h1 {
+            text-align: center;
+        }
+        .payslip table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .payslip table, .payslip th, .payslip td {
+            border: 1px solid black;
+        }
+        .payslip th, .payslip td {
+            padding: 8px;
+            text-align: left;
+        }
+        .form {
+            margin: 20px;
+            text-align: center;
+        }
+        .form input {
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <input type="text" id="employeeName" placeholder="Employee Name">
+        <input type="text" id="employeeId" placeholder="Employee ID">
+        <input type="text" id="designation" placeholder="Designation">
+        <input type="number" id="basicPay" placeholder="Basic Pay">
+        <input type="number" id="allowances" placeholder="Allowances">
+        <input type="number" id="deductions" placeholder="Deductions">
+        <button onclick="generatePayslip()">Generate Payslip</button>
+    </div>
+    <div id="payslip" class="payslip" style="display: none;">
+        <img src="willware-logo-removebg (2).png" class="logo">
+        <span class="address">WILLWARE TECHNOLOGIES PVT LTD
+            No.105,7thBlock,Koramangala, Bangalore- 560095.
+            Website:www.willwaretech.com </span>
+        <h1>Payslip</h1>
+        <p>Employee Name: <span id="name"></span></p>
+        <p>Employee ID: <span id="id"></span></p>
+        <p>Designation: <span id="designationDisplay"></span></p>
+        <table>
+            <tr>
+                <th>Earnings</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Basic Pay</td>
+                <td id="basicPayDisplay"></td>
+            </tr>
+            <tr>
+                <td>Allowances</td>
+                <td id="allowancesDisplay"></td>
+            </tr>
+            <tr>
+                <th>Deductions</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Deductions</td>
+                <td id="deductionsDisplay"></td>
+            </tr>
+            <tr>
+                <th>Net Pay</th>
+                <th id="netPayDisplay"></th>
+            </tr>
+            <p> Jeeva R
+                Managing Director
+                WillWare Technologies</p>
+        </table>
+    </div>
+    <button onclick="convertToPDF()">Download as PDF</button>
+
+    <script>
+        function generatePayslip() {
+            const employeeName = document.getElementById('employeeName').value;
+            const employeeId = document.getElementById('employeeId').value;
+            const designation = document.getElementById('designation').value;
+            const basicPay = parseFloat(document.getElementById('basicPay').value);
+            const allowances = parseFloat(document.getElementById('allowances').value);
+            const deductions = parseFloat(document.getElementById('deductions').value);
+            const netPay = basicPay + allowances - deductions;
+
+            document.getElementById('name').textContent = employeeName;
+            document.getElementById('id').textContent = employeeId;
+            document.getElementById('designationDisplay').textContent = designation;
+            document.getElementById('basicPayDisplay').textContent = basicPay.toFixed(2);
+            document.getElementById('allowancesDisplay').textContent = allowances.toFixed(2);
+            document.getElementById('deductionsDisplay').textContent = deductions.toFixed(2);
+            document.getElementById('netPayDisplay').textContent = netPay.toFixed(2);
+
+            document.getElementById('payslip').style.display = 'block';
+        }
+
+        function convertToPDF() {
+            const element = document.getElementById('payslip');
+            html2pdf().from(element).save();
+        }
+    </script>
+</body>
+</html>
